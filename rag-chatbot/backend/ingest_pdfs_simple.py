@@ -109,7 +109,7 @@ def extract_text_from_pdf(pdf_path: Path) -> str:
         raise
 
 
-def chunk_text(text: str, source: str, chunk_size: int = 1000, chunk_overlap: int = 100) -> List[Dict]:
+def chunk_text(text: str, source: str, country: str = "GLOBAL", chunk_size: int = 1000, chunk_overlap: int = 100) -> List[Dict]:
     """Split text into chunks with metadata."""
     try:
         from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -131,7 +131,7 @@ def chunk_text(text: str, source: str, chunk_size: int = 1000, chunk_overlap: in
                 "text": chunk,
                 "source": source,
                 "chunk_index": i,
-                "country": "GLOBAL"
+                "country": country
             }
             documents.append(doc)
         
@@ -224,8 +224,13 @@ def main():
                 # Extract text
                 text = extract_text_from_pdf(pdf_file)
                 
-                # Chunk text
-                documents = chunk_text(text, source=pdf_file.stem)
+                # Detect country based on document content
+                # LDA = Lahore Development Authority (Pakistan)
+                country = "Pakistan" if "LDA" in pdf_file.name.upper() else "GLOBAL"
+                logger.info(f"🌍 Country: {country}")
+                
+                # Chunk text with country metadata
+                documents = chunk_text(text, source=pdf_file.stem, country=country)
                 
                 # Upload to Pinecone
                 uploaded = upload_documents(documents, embeddings_service, pinecone_service)

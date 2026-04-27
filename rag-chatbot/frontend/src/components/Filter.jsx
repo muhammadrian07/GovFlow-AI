@@ -17,7 +17,8 @@ const Filter = ({ selectedCountry, onCountryChange }) => {
     'Germany',
     'France',
     'Japan',
-    'India'
+    'India',
+    'Pakistan'
   ]
 
   return (
