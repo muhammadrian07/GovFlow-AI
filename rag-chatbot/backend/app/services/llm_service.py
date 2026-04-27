@@ -50,16 +50,26 @@ class LLMService:
             # Construct context string
             context = "\n\n".join(context_chunks)
             
-            # Create system and user messages
-            system_message = """You are a helpful government policy assistant. 
-Answer ONLY using the provided context. If the answer is not in the context, say "I don't have enough information to answer this question.\""""
+            # Create BALANCED system message
+            system_message = """You are a government policy assistant specializing in regulations and policies.
+
+RULES:
+1. ONLY answer based on the provided context documents
+2. Extract and synthesize relevant information from the documents
+3. If the context contains information that directly or indirectly answers the question, use it
+4. If the context does NOT contain relevant policy/regulation information for the question, respond:
+   "I don't have information about that in the available documents."
+5. Do NOT provide general knowledge that is not in the context
+6. Do NOT answer questions about weather, current events, or non-policy topics
+
+Your responses MUST be grounded in the provided government policy documents ONLY."""
             
-            user_message = f"""Context:
+            user_message = f"""Government Policy Documents Context:
 {context}
 
-Question: {query}
+User Question: {query}
 
-Answer:"""
+Provide your response based ONLY on the context above. If context doesn't address the question, say so clearly."""
             
             # Call Groq API
             answer = self._call_groq_api(system_message, user_message)
@@ -71,22 +81,47 @@ Answer:"""
             logger.error(f"Error generating answer: {str(e)}")
             raise
     
-    def generate_answer_without_context(self, query: str) -> str:
+    def generate_answer_without_context(self, query: str, country: str = None) -> str:
         """
         Generate a general answer using Groq LLM without RAG context.
-        Used for general questions not related to legal/policy documents.
+        Used for policy-related questions when documents aren't available.
+        Rejects non-policy questions and validates country filter.
         
         Args:
             query: User's question
+            country: Selected country filter (to validate question is about selected country)
             
         Returns:
             Generated answer from Groq LLM
         """
         try:
-            # System message for general Q&A (not constrained to context)
-            system_message = """You are a helpful government policy assistant. 
-You can help answer general questions about government, policies, laws, and administrative matters.
-Be concise, informative, and friendly in your responses."""
+            # System message - STRICT about policy focus AND country filter
+            system_message = f"""You are a government policy assistant.
+
+CONTEXT:
+- User has selected FILTER: {country} policies
+- Only help with {country} policy and regulation questions
+
+RULES:
+1. Only answer {country} policy, regulations, laws, and government administration questions
+2. If question mentions OTHER countries or regions, REJECT it with: "You've selected {country} filter. Your question is about [other_country], which is different. Please change the country filter or ask about {country} policies."
+3. Reject weather, sports, entertainment, cooking, or non-policy topics
+4. Keep responses professional and focused on governance
+5. Guide users back to {country} policy-related questions
+
+IMPORTANT: If the question is about a different country than {country}, REJECT it regardless of topic."""
+            
+            user_message = query
+            
+            # Call Groq API
+            answer = self._call_groq_api(system_message, user_message)
+            
+            logger.info(f"Generated general answer for query: {query[:50]}... (country filter: {country})")
+            return answer
+        
+        except Exception as e:
+            logger.error(f"Error generating general answer: {str(e)}")
+            raise
             
             user_message = query
             

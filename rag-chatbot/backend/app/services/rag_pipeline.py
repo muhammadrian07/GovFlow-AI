@@ -97,7 +97,8 @@ class RAGPipeline:
                 logger.info("📢 Falling back to direct LLM response for general questions...")
                 
                 # Fallback: Call LLM directly without context for general questions
-                answer = self.llm_service.generate_answer_without_context(query)
+                # Pass country filter so LLM can validate if question is about selected country
+                answer = self.llm_service.generate_answer_without_context(query, country)
                 logger.info("✅ Answer generated from Groq LLM (general response, no RAG context)")
                 
                 return {
