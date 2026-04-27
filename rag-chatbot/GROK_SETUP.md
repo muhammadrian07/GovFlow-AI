@@ -1,82 +1,125 @@
-# 🔑 GROK API SETUP - RAG Chatbot
+# � Complete GROK + HuggingFace FREE Setup
 
-This guide explains how to set up and use **Grok AI API** instead of OpenAI for the RAG Chatbot.
+This guide explains the final setup: **Grok AI LLM** + **HuggingFace Embeddings** (100% FREE).
 
-## 🔄 What Changed?
+## 📋 Architecture
 
-| Component | Before | Now |
-|-----------|--------|-----|
-| **LLM** | OpenAI (gpt-3.5-turbo) | Grok AI (grok-1) |
-| **Embeddings** | OpenAI | OpenAI (kept for embeddings) |
-| **API Provider** | OpenAI | xAI (Grok) |
+| Component | Service | Cost |
+|-----------|---------|------|
+| **LLM** | Grok AI (grok-1) | FREE (xAI) |
+| **Embeddings** | HuggingFace (all-MiniLM-L6-v2) | FREE (local) |
+| **Vector DB** | Pinecone | FREE (100K vectors) |
+| **Integration** | LangChain | FREE (open-source) |
 
-### Why Grok?
-- ✅ Free tier available
-- ✅ Fast inference
-- ✅ Real-time knowledge cutoff
-- ✅ Good for government policy content
-- ✅ Lower latency
+### Why This Stack?
+- ✅ 100% FREE - No paid services
+- ✅ Open-source where possible
+- ✅ Fast local embeddings (no API latency)
+- ✅ Grok has free API tier
+- ✅ Perfect for students
 
-## 📋 Getting Grok API Key
+## 🔑 Getting Grok API Key
 
 ### Step 1: Create Account
-1. Go to https://console.x.ai/ or https://grok.com/
+1. Go to https://console.x.ai/
 2. Sign up with your email
-3. Verify your email address
-4. Complete profile setup
+3. Verify your email
+4. Complete profile
 
 ### Step 2: Generate API Key
-1. Navigate to API settings
-2. Click "Create API Key" or "Generate Key"
-3. Copy the API key (save it securely)
-4. Give it a descriptive name: `rag-chatbot`
+1. Navigate to API Settings
+2. Click "Create API Key"
+3. Copy the key immediately (won't show again)
+4. Label it: `rag-chatbot`
 
-### Step 3: Note the Model Name
-- **Model ID**: `grok-1` (default)
-- API Endpoint: `https://api.x.ai/v1/chat/completions`
+### Step 3: Model Name
+- **Model**: `grok-1`
+- **Endpoint**: `https://api.x.ai/v1/chat/completions`
+- **Free Tier**: Yes, rate limited
 
-## 🔑 Getting OpenAI API Key (for Embeddings)
+## 📦 HuggingFace Embeddings (Already Included!)
 
-You still need OpenAI API key for generating embeddings:
+**No API key needed!** Embeddings run locally using:
+- Model: `all-MiniLM-L6-v2` (recommended)
+- Size: ~22MB
+- Downloads automatically on first use
+- Runs offline
 
-1. Go to https://platform.openai.com/api/keys
-2. Create a new secret key
-3. Copy the key
-4. Save it securely
+Other free models available:
+- `all-mpnet-base-v2` - Better quality, slightly slower
+- `paraphrase-MiniLM-L6-v2` - Good for policy docs
 
-## ⚙️ Configuration
-
-### Update .env File
-
-In `backend/.env`, set:
+## 🔧 Configuration (.env)
 
 ```env
-# Pinecone Configuration
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX=your_index_name
-PINECONE_ENVIRONMENT=us-east-1
-
-# Grok AI (LLM)
-GROK_API_KEY=your_grok_api_key_here
+# Grok LLM (FREE - get from console.x.ai)
+GROK_API_KEY=xai-your_key_here
 LLM_MODEL=grok-1
 
-# OpenAI (Embeddings only)
-OPENAI_API_KEY=your_openai_api_key_here
-EMBEDDINGS_PROVIDER=openai
+# Pinecone Vector DB (FREE - 100K vectors)
+PINECONE_API_KEY=pcsk_your_key_here
+PINECONE_INDEX=starter-index
+PINECONE_ENVIRONMENT=us-east-1
 
-# Application
+# HuggingFace Embeddings (FREE - runs locally, NO API KEY)
+EMBEDDINGS_PROVIDER=huggingface
+EMBEDDINGS_MODEL=all-MiniLM-L6-v2
+
+# App Config
 DEBUG=True
-CORS_ORIGINS=["http://localhost:5173"]
+CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000"]
 ```
 
-## 🚀 Installation
-
-### 1. Install Dependencies
+## ✅ Quick Start
 
 ```bash
+# 1. Navigate to backend
 cd backend
+
+# 2. Create/update .env with above values
+
+# 3. Install dependencies
 pip install -r requirements.txt
+
+# 4. Run server
+uvicorn app.main:app --reload
+
+# 5. Test it
+curl http://localhost:8000/health
 ```
+
+## 📊 Cost Breakdown
+
+| Service | Original | Current |
+|---------|----------|---------|
+| LLM | $20-100/mo | FREE |
+| Embeddings | $0.02-1/K tokens | FREE |
+| Vector DB | $72-500/mo | FREE |
+| **TOTAL** | **$92-600/mo** | **$0** ✅ |
+
+## 🎓 Student Resources
+
+- [FREE_TIER_SETUP.md](./FREE_TIER_SETUP.md) - Complete student guide
+- [DIGITAL_OCEAN_DEPLOYMENT.md](./DIGITAL_OCEAN_DEPLOYMENT.md) - Free deployment
+
+## ⚠️ Grok Free Tier Limits
+
+- Rate limited (check xAI docs for specifics)
+- Great for development/learning
+- Upgrade anytime if needed
+
+## 🚀 Next Steps
+
+1. Get Grok API key from https://console.x.ai/
+2. Set `.env` file
+3. Install dependencies
+4. Run: `python ingest_pdfs_simple.py` to upload PDFs
+5. Start chatting!
+
+---
+
+**Everything is FREE! 🎉**
+
 
 **Key packages for Grok**:
 - `httpx` - HTTP client for Grok API

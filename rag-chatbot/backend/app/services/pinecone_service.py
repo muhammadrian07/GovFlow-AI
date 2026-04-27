@@ -82,6 +82,24 @@ class PineconeService:
             logger.error(f"Error querying Pinecone: {str(e)}")
             raise
     
+    def upsert_vectors(self, vectors: List[tuple]) -> None:
+        """
+        Upload vectors to Pinecone.
+        
+        Args:
+            vectors: List of tuples (id, embedding, metadata)
+        """
+        try:
+            batch_size = 100
+            for i in range(0, len(vectors), batch_size):
+                batch = vectors[i:i + batch_size]
+                self.index.upsert(vectors=batch)
+            
+            logger.info(f"Upserted {len(vectors)} vectors to Pinecone")
+        except Exception as e:
+            logger.error(f"Error upserting vectors to Pinecone: {str(e)}")
+            raise
+    
     def upsert_documents(
         self,
         documents: List[Dict[str, Any]],

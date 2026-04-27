@@ -6,7 +6,6 @@ Handles interaction with Grok AI for LLM generation.
 from typing import List, Dict, Any
 import httpx
 import json
-from langchain.prompts import PromptTemplate
 import logging
 
 logger = logging.getLogger(__name__)
