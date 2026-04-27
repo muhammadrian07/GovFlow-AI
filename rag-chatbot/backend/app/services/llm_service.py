@@ -1,6 +1,6 @@
 """
 Language Model service.
-Handles interaction with Grok AI for LLM generation.
+Handles interaction with Groq API for LLM generation.
 """
 
 from typing import List, Dict, Any
@@ -13,23 +13,23 @@ logger = logging.getLogger(__name__)
 
 class LLMService:
     """
-    Service for interacting with Language Models.
-    Handles prompt construction and LLM queries.
+    Service for interacting with Groq Language Models.
+    Handles prompt construction and LLM queries using Groq API.
     """
     
-    def __init__(self, api_key: str, model: str = "grok-1"):
+    def __init__(self, api_key: str, model: str = "llama-3.1-8b-instant"):
         """
-        Initialize Grok LLM service.
+        Initialize Groq LLM service.
         
         Args:
-            api_key: Grok API key from xAI
-            model: Model name to use (default: grok-1)
+            api_key: Groq API key
+            model: Model name to use (default: mixtral-8x7b-32768)
         """
         self.model = model
         self.api_key = api_key
-        self.api_url = "https://api.x.ai/v1/chat/completions"
+        self.api_url = "https://api.groq.com/openai/v1/chat/completions"
         self.temperature = 0.7
-        logger.info(f"Grok LLM service initialized with model: {model}")
+        logger.info(f"Groq LLM service initialized with model: {model}")
     
     def generate_answer(
         self,
@@ -37,14 +37,14 @@ class LLMService:
         context_chunks: List[str]
     ) -> str:
         """
-        Generate an answer using context from RAG pipeline via Grok API.
+        Generate an answer using context from RAG pipeline via Groq API.
         
         Args:
             query: User's original query
             context_chunks: Retrieved context from vector database
             
         Returns:
-            Generated answer from Grok LLM
+            Generated answer from Groq LLM
         """
         try:
             # Construct context string
@@ -61,8 +61,8 @@ Question: {query}
 
 Answer:"""
             
-            # Call Grok API
-            answer = self._call_grok_api(system_message, user_message)
+            # Call Groq API
+            answer = self._call_groq_api(system_message, user_message)
             
             logger.info(f"Generated answer for query: {query[:50]}...")
             return answer
@@ -71,16 +71,16 @@ Answer:"""
             logger.error(f"Error generating answer: {str(e)}")
             raise
     
-    def _call_grok_api(self, system_message: str, user_message: str) -> str:
+    def _call_groq_api(self, system_message: str, user_message: str) -> str:
         """
-        Call Grok API to generate response.
+        Call Groq API to generate response.
         
         Args:
             system_message: System prompt/instructions
             user_message: User query with context
             
         Returns:
-            Generated response from Grok
+            Generated response from Groq
         """
         try:
             headers = {
@@ -106,17 +106,17 @@ Answer:"""
                 result = response.json()
                 answer = result["choices"][0]["message"]["content"]
                 
-                logger.info("Grok API call successful")
+                logger.info("Groq API call successful")
                 return answer
         
         except httpx.HTTPError as e:
-            logger.error(f"Grok API HTTP error: {str(e)}")
+            logger.error(f"Groq API HTTP error: {str(e)}")
             raise
         except json.JSONDecodeError as e:
-            logger.error(f"Error parsing Grok response: {str(e)}")
+            logger.error(f"Error parsing Groq response: {str(e)}")
             raise
         except Exception as e:
-            logger.error(f"Error calling Grok API: {str(e)}")
+            logger.error(f"Error calling Groq API: {str(e)}")
             raise
     
     def extract_sources(

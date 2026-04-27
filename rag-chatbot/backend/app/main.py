@@ -49,18 +49,18 @@ async def lifespan(app: FastAPI):
         logger.info("✅ Pinecone service initialized")
         
         llm_service = LLMService(
-            api_key=settings.grok_api_key,
+            api_key=settings.groq_api_key,
             model=settings.llm_model
         )
-        logger.info("✅ Grok LLM service initialized")
+        logger.info("✅ Groq LLM service initialized")
         
         rag_pipeline = RAGPipeline(
-            grok_api_key=settings.grok_api_key,
+            groq_api_key=settings.groq_api_key,
             embeddings_model=settings.embeddings_model,
             pinecone_service=pinecone_service,
             llm_service=llm_service
         )
-        logger.info("✅ RAG Pipeline initialized (ALL FREE: HuggingFace + Grok + Pinecone)")
+        logger.info("✅ RAG Pipeline initialized (ALL FREE: HuggingFace + Groq + Pinecone)")
         
         # Set the pipeline in the chat router
         chat.rag_pipeline = rag_pipeline

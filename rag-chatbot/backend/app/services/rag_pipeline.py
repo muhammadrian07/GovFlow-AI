@@ -4,7 +4,7 @@ Orchestrates the entire flow: embedding → retrieval → generation.
 
 Uses FREE services:
 - HuggingFace embeddings (no API key)
-- Grok AI LLM (free tier)
+- Groq LLM (free tier)
 - Pinecone vector DB (free tier)
 """
 
@@ -23,13 +23,13 @@ class RAGPipeline:
     
     Uses:
     - HuggingFace embeddings (free, no API key)
-    - Grok AI for LLM generation (free)
+    - Groq for LLM generation (free)
     - Pinecone for vector storage (free tier)
     """
     
     def __init__(
         self,
-        grok_api_key: str,
+        groq_api_key: str,
         embeddings_model: str,
         pinecone_service: PineconeService,
         llm_service: LLMService
@@ -38,12 +38,12 @@ class RAGPipeline:
         Initialize RAG pipeline with FREE services.
         
         Args:
-            grok_api_key: Grok API key for LLM
+            groq_api_key: Groq API key for LLM
             embeddings_model: HuggingFace model name for embeddings
             pinecone_service: Initialized Pinecone service
-            llm_service: Initialized LLM service (Grok-based)
+            llm_service: Initialized LLM service (Groq-based)
         """
-        self.grok_api_key = grok_api_key
+        self.groq_api_key = groq_api_key
         self.pinecone_service = pinecone_service
         self.llm_service = llm_service
         

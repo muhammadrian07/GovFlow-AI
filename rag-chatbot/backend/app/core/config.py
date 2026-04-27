@@ -17,7 +17,7 @@ class Settings(BaseSettings):
         pinecone_api_key: API key for Pinecone vector database (FREE tier)
         pinecone_index: Index name in Pinecone
         pinecone_environment: Pinecone environment region
-        grok_api_key: API key for Grok AI LLM (FREE)
+        groq_api_key: API key for Groq LLM (FREE)
         embeddings_model: Free embeddings model name (HuggingFace)
         debug: Debug mode flag
         cors_origins: List of allowed CORS origins
@@ -28,9 +28,9 @@ class Settings(BaseSettings):
     pinecone_index: str = "govflow-index"
     pinecone_environment: str = "us-east-1"
     
-    # Grok AI Configuration (FREE with API key)
-    grok_api_key: str
-    llm_model: str = "grok-1"
+    # Groq Configuration (FREE with API key)
+    groq_api_key: str
+    llm_model: str = "llama-3.1-8b-instant"
     
     # Embeddings Configuration (FREE - HuggingFace models, no API key needed)
     embeddings_model: str = "all-MiniLM-L6-v2"  # Free, fast, high quality
