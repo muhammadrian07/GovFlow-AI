@@ -71,6 +71,35 @@ Answer:"""
             logger.error(f"Error generating answer: {str(e)}")
             raise
     
+    def generate_answer_without_context(self, query: str) -> str:
+        """
+        Generate a general answer using Groq LLM without RAG context.
+        Used for general questions not related to legal/policy documents.
+        
+        Args:
+            query: User's question
+            
+        Returns:
+            Generated answer from Groq LLM
+        """
+        try:
+            # System message for general Q&A (not constrained to context)
+            system_message = """You are a helpful government policy assistant. 
+You can help answer general questions about government, policies, laws, and administrative matters.
+Be concise, informative, and friendly in your responses."""
+            
+            user_message = query
+            
+            # Call Groq API without context
+            answer = self._call_groq_api(system_message, user_message)
+            
+            logger.info(f"Generated general answer for query: {query[:50]}...")
+            return answer
+        
+        except Exception as e:
+            logger.error(f"Error generating general answer: {str(e)}")
+            raise
+    
     def _call_groq_api(self, system_message: str, user_message: str) -> str:
         """
         Call Groq API to generate response.

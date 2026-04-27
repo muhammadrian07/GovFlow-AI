@@ -3,10 +3,9 @@ import './Login.css'
 
 /**
  * Login component
- * Mock authentication page (no backend verification)
- * In production, integrate with real auth service
+ * Validates credentials against users stored in localStorage
  */
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, onGoToSignup }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -26,15 +25,28 @@ const Login = ({ onLogin }) => {
       return
     }
 
-    // Mock authentication (no backend call)
-    // In production, verify credentials with backend
     if (password.length < 6) {
       setError('Password must be at least 6 characters')
       return
     }
 
-    // Success
-    onLogin({ email, name: email.split('@')[0] })
+    // Verify credentials against stored users
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const user = users.find(u => u.email === email)
+
+    if (!user) {
+      setError('Email not found. Please sign up first.')
+      setTimeout(() => onGoToSignup(), 1500)
+      return
+    }
+
+    if (user.password !== password) {
+      setError('Incorrect password')
+      return
+    }
+
+    // Success - login with found user
+    onLogin({ email: user.email, name: user.name })
   }
 
   return (
@@ -75,7 +87,7 @@ const Login = ({ onLogin }) => {
 
         <p className="signup-link">
           Don't have an account?{' '}
-          <a href="#signup">Sign up here</a>
+          <a href="#signup" onClick={(e) => { e.preventDefault(); onGoToSignup() }}>Sign up here</a>
         </p>
       </div>
     </div>

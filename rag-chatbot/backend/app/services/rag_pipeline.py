@@ -61,6 +61,10 @@ class RAGPipeline:
         """
         Process a user query through the complete RAG pipeline using FREE services.
         
+        Hybrid approach:
+        1. First tries RAG (retrieval + generation) if documents exist in Pinecone
+        2. Falls back to direct LLM if no relevant documents found (general questions)
+        
         Args:
             query: User's question
             country: Country filter for context
@@ -83,34 +87,46 @@ class RAGPipeline:
                 top_k=top_k
             )
             
-            if not retrieved_docs:
-                logger.warning(f"No documents retrieved for country: {country}")
+            # Step 3: Filter by relevance threshold (0.5 minimum score)
+            # Scores range from 0 to 1, where 1 is exact match
+            relevance_threshold = 0.5
+            relevant_docs = [doc for doc in retrieved_docs if doc.get("score", 0) >= relevance_threshold]
+            
+            if not relevant_docs or len(relevant_docs) == 0:
+                logger.info(f"⚠️ No relevant documents retrieved (threshold: {relevance_threshold}) for query: {query[:50]}...")
+                logger.info("📢 Falling back to direct LLM response for general questions...")
+                
+                # Fallback: Call LLM directly without context for general questions
+                answer = self.llm_service.generate_answer_without_context(query)
+                logger.info("✅ Answer generated from Groq LLM (general response, no RAG context)")
+                
                 return {
-                    "answer": "I don't have any documents for the selected country to answer your question.",
+                    "answer": answer,
                     "sources": [],
-                    "model": self.llm_service.model
+                    "model": f"{self.llm_service.model} (General Mode)"
                 }
             
-            logger.info(f"Retrieved {len(retrieved_docs)} documents")
+            logger.info(f"✅ Retrieved {len(relevant_docs)} relevant documents from Pinecone (score >= {relevance_threshold})")
+            logger.info("📚 Using RAG mode (retrieval + generation with context)")
             
-            # Step 3: Extract context chunks from documents
-            context_chunks = [doc.get("text", "") for doc in retrieved_docs]
+            # Step 4: Extract context chunks from documents
+            context_chunks = [doc.get("text", "") for doc in relevant_docs]
             
-            # Step 4: Generate answer using Grok LLM with context (Grok FREE)
+            # Step 5: Generate answer using Groq LLM with context (Groq FREE)
             answer = self.llm_service.generate_answer(query, context_chunks)
-            logger.info("Answer generated from Grok LLM (FREE)")
+            logger.info("✅ Answer generated from Groq LLM with RAG context")
             
-            # Step 5: Extract and format sources
-            sources = self.llm_service.extract_sources(retrieved_docs)
+            # Step 6: Extract and format sources
+            sources = self.llm_service.extract_sources(relevant_docs)
             
-            # Step 6: Return complete response
+            # Step 7: Return complete response
             response = {
                 "answer": answer,
                 "sources": sources,
-                "model": self.llm_service.model
+                "model": f"{self.llm_service.model} (RAG Mode)"
             }
             
-            logger.info("Query processing completed successfully (ALL FREE SERVICES)")
+            logger.info("Query processing completed successfully (RAG with FREE SERVICES)")
             return response
         
         except Exception as e:

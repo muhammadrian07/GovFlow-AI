@@ -3,9 +3,9 @@ import './Signup.css'
 
 /**
  * Signup component
- * Mock signup page for new users
+ * Creates new user accounts and stores them in localStorage
  */
-const Signup = ({ onSignup }) => {
+const Signup = ({ onSignup, onLogin }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,6 +13,7 @@ const Signup = ({ onSignup }) => {
     confirmPassword: ''
   })
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -25,10 +26,16 @@ const Signup = ({ onSignup }) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
 
     // Validation
     if (!formData.name || !formData.email || !formData.password) {
       setError('Please fill in all fields')
+      return
+    }
+
+    if (!formData.email.includes('@')) {
+      setError('Please enter a valid email')
       return
     }
 
@@ -42,8 +49,21 @@ const Signup = ({ onSignup }) => {
       return
     }
 
-    // Mock signup
-    onSignup(formData)
+    // Check for duplicate email
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]')
+    const userExists = existingUsers.some(u => u.email === formData.email)
+    
+    if (userExists) {
+      setError('Email already registered. Please sign in instead.')
+      setTimeout(() => onLogin(), 2000)
+      return
+    }
+
+    // Success
+    setSuccess('Account created successfully! Redirecting...')
+    setTimeout(() => {
+      onSignup(formData)
+    }, 1500)
   }
 
   return (
@@ -102,11 +122,17 @@ const Signup = ({ onSignup }) => {
           </div>
 
           {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
 
           <button type="submit" className="btn-signup">
             Sign Up
           </button>
         </form>
+
+        <p className="login-link">
+          Already have an account?{' '}
+          <a href="#login" onClick={(e) => { e.preventDefault(); onLogin() }}>Sign in here</a>
+        </p>
       </div>
     </div>
   )
