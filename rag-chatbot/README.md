@@ -1,157 +1,186 @@
-# 🚀 RAG Chatbot - Production-Ready Government Policy Assistant
+# 🏛️ Government Policy RAG Chatbot
 
-A full-stack **Retrieval-Augmented Generation (RAG)** chatbot system for government policy Q&A with **FastAPI backend** and **React+Vite frontend**. Now with **Grok AI** LLM + **HuggingFace embeddings** - **100% FREE tier!** 🎓
+A production-ready **Retrieval-Augmented Generation (RAG) chatbot** that answers government policy questions using intelligent document retrieval and AI-powered responses.
+
+---
 
 ## ✨ Features
 
-- **🤖 RAG Pipeline**: Retrieval-augmented generation with vector embeddings
-- **📚 Pinecone Integration**: Vector database for efficient document retrieval (FREE tier)
-- **🧠 Grok AI LLM**: Fast, intelligent language model by xAI (FREE API)
-- **🌍 HuggingFace Embeddings**: Local embeddings model (NO API key, completely FREE)
-- **🎓 Student-Friendly**: $0 cost - perfect for students on a budget
-- **🌍 Country Filtering**: Search documents by geographic region
-- **⚡ FastAPI Backend**: Async API with comprehensive error handling
-- **⚛️ React Frontend**: Modern UI with real-time chat
-- **🔐 Secure**: Environment-based configuration, no hardcoded secrets
-- **📄 Source Attribution**: View documents used to generate answers
-- **🎨 Beautiful UI**: Gradient design, responsive layout
-- **📱 Mobile-Friendly**: Works on all devices
-- **🔄 Easy LLM Swap**: Use Grok, OpenAI, or compatible APIs
+- **📚 Intelligent Document Retrieval**: Vector embeddings + semantic search via Pinecone
+- **🤖 Hybrid AI System**: Uses document context when available, falls back to LLM for general questions
+- **🌍 Multi-Country Support**: Filter results by country/region (Pakistan, USA, etc.)
+- **👤 User Authentication**: Sign up, login, persistent sessions
+- **📄 PDF Ingestion**: Automatically process and chunk policy documents
+- **📖 Source References**: See which documents answered your question
+- **⚡ Free Tier Stack**: HuggingFace embeddings, Groq LLM, Pinecone (all free)
+- **🔒 Country-Aware Responses**: Rejects questions about different countries than selected filter
 
-## 📁 Project Structure
+---
 
+## 🛠️ Tech Stack
+
+### Backend
+- **Framework**: FastAPI (Python 3.10)
+- **Vector DB**: Pinecone (free tier - 100K vectors)
+- **LLM**: Groq (free tier)
+- **Embeddings**: HuggingFace all-MiniLM-L6-v2 (local, free)
+- **PDF Processing**: pypdf + LangChain
+
+### Frontend
+- **Framework**: React + Vite
+- **Authentication**: localStorage
+- **HTTP Client**: Axios
+
+### Infrastructure
+- **Backend Deployment**: Digital Ocean (App Platform)
+- **Frontend Deployment**: Vercel
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js 16+
+- npm or yarn
+- API Keys (free):
+  - [Groq API Key](https://console.groq.com)
+  - [Pinecone API Key](https://www.pinecone.io)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd govflow_ai/rag-chatbot
+   ```
+
+2. **Backend Setup**
+   ```bash
+   cd backend
+   
+   # Create virtual environment
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   
+   # Create .env file
+   cp .env.example .env
+   ```
+
+3. **Frontend Setup**
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+---
+
+## ⚙️ Configuration
+
+### Backend `.env` File
+
+```env
+# Groq LLM (Free tier)
+GROQ_API_KEY=gsk_your_api_key_here
+LLM_MODEL=llama-3.1-8b-instant
+
+# Pinecone Vector Database
+PINECONE_API_KEY=pcsk_your_api_key_here
+PINECONE_INDEX=govflowai
+PINECONE_ENVIRONMENT=us-east-1
+
+# Embeddings
+EMBEDDINGS_MODEL=all-MiniLM-L6-v2
 ```
-rag-chatbot/
-├── backend/                 # FastAPI application
-│   ├── app/
-│   │   ├── main.py         # Entry point
-│   │   ├── core/
-│   │   │   └── config.py   # Settings management
-│   │   ├── routes/
-│   │   │   └── chat.py     # Chat endpoints
-│   │   ├── services/
-│   │   │   ├── rag_pipeline.py      # Main RAG logic
-│   │   │   ├── pinecone_service.py  # Vector DB
-│   │   │   └── llm_service.py       # LLM integration
-│   │   └── models/
-│   │       └── request_models.py    # Pydantic schemas
-│   ├── requirements.txt
-│   └── .env.example
-│
-├── frontend/                # React + Vite app
-│   ├── src/
-│   │   ├── pages/          # Page components
-│   │   ├── components/     # Reusable components
-│   │   ├── services/       # API client
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   ├── vite.config.js
-│   └── .env.example
-│
-├── .gitignore
-└── README.md
+
+### Frontend `.env` File
+
+```env
+VITE_API_URL=http://localhost:8000
+VITE_API_TIMEOUT=30000
 ```
 
-## 🔧 Prerequisites
+---
 
-- **Python 3.9+**
-- **Node.js 18+**
-- **npm or yarn**
-- **Pinecone Account** (free tier: 100K vectors)
-- **Grok AI API Key** (free at https://console.x.ai)
+## 🏃 Running Development Servers
 
-## 💰 FREE Tier - $0 Cost!
-
-**Perfect for students and learning!** This project uses only FREE services:
-
-| Component | Service | Cost | Why |
-|-----------|---------|------|-----|
-| LLM (AI Brain) | Grok AI (xAI) | **FREE** | Free API tier available |
-| Embeddings | HuggingFace (local) | **FREE** | No API key needed |
-| Vector Database | Pinecone | **FREE** | 100K vectors included |
-| Backend | FastAPI | **FREE** | Open-source |
-| Frontend | React | **FREE** | Open-source |
-| **TOTAL COST** | | **$0** | Perfect for students! 🎓 |
-
-### 📚 Documentation for FREE Setup
-
-- **[FREE_TIER_SETUP.md](./FREE_TIER_SETUP.md)** - Complete guide with free API keys and cost breakdown
-- **[DIGITAL_OCEAN_DEPLOYMENT.md](./DIGITAL_OCEAN_DEPLOYMENT.md)** - Deploy for FREE with DO student credits
-
-### 🚀 Quick Start
-
-### 1. Backend Setup
-
+### Start Backend (Terminal 1)
 ```bash
-# Navigate to backend
 cd backend
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-
-# Install dependencies (includes HuggingFace for FREE embeddings)
-pip install -r requirements.txt
-
-# Create .env file from example
-cp .env.example .env
-
-# Edit .env with your FREE API keys
-# PINECONE_API_KEY=your_free_key
-# GROK_API_KEY=your_free_key
-# EMBEDDINGS_MODEL=all-MiniLM-L6-v2 (FREE, no API key needed!)
-
-# Run backend
-python -m uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+✅ Backend running at: http://localhost:8000
 
-Backend will be available at `http://localhost:8000`
-API docs at `http://localhost:8000/docs`
-
-
-### 2. Frontend Setup
-
+### Start Frontend (Terminal 2)
 ```bash
-# Navigate to frontend (new terminal)
 cd frontend
-
-# Install dependencies
-npm install
-
-# Create .env.local (optional)
-cp .env.example .env.local
-
-# Start development server
 npm run dev
 ```
+✅ Frontend running at: http://localhost:5173
 
-Frontend will be available at `http://localhost:5173`
+---
 
-### 3. Test the Application
+## 📚 How to Use
 
-1. Open `http://localhost:5173` in your browser
-2. Sign in (mock authentication - any email/password works)
-3. Select a country
-4. Ask a question about government policies
-5. View answers with sources
+### 1. Create Account
+- Go to http://localhost:5173
+- Click "Sign up"
+- Enter name, email, password
+- Account is saved to localStorage (development only)
 
-## 📚 API Documentation
+### 2. Select Country
+- Choose from dropdown: Pakistan, USA, etc.
+- Filter applies to all questions
 
-### POST /api/chat
+### 3. Ask Questions
+- **Policy Questions**: "What are commercial zone regulations in Lahore?"
+  - ✅ Returns answers from documents with sources
 
-Submit a question and get an answer with sources.
+- **General Questions**: "Tell me about yourself"
+  - ✅ Falls back to LLM (no sources)
+
+- **Out-of-Scope**: "What's the weather?"
+  - ❌ Rejected as non-policy question
+
+### 4. View Sources
+- Sources shown below each answer
+- Indicates which document answered your question
+
+---
+
+## 📄 PDF Ingestion
+
+### Add New PDFs
+1. Place PDF files in `backend/knowledge_base/`
+2. Run ingestion script:
+   ```bash
+   cd backend
+   python ingest_pdfs_simple.py
+   ```
+3. New vectors uploaded to Pinecone automatically
+
+### Automatic Country Detection
+- **Naming Convention**: 
+  - `*LDA*.pdf` → Tagged as "Pakistan"
+  - `*USA*.pdf` → Tagged as "USA"
+  - Other files → Tagged as "GLOBAL"
+
+---
+
+## 🔌 API Endpoints
+
+### POST `/api/chat`
+Query the chatbot with a question.
 
 **Request:**
 ```json
 {
-  "query": "What are the current tax rates?",
-  "country": "USA",
+  "query": "What are the building regulations?",
+  "country": "Pakistan",
   "top_k": 5
 }
 ```
@@ -159,265 +188,272 @@ Submit a question and get an answer with sources.
 **Response:**
 ```json
 {
-  "answer": "The current tax rates...",
+  "answer": "Building regulations include...",
   "sources": [
     {
-      "text": "Relevant excerpt from document",
-      "source": "tax_policy_2024.pdf",
-      "page": 5
+      "source": "2.LDA Landuse Rules_2020",
+      "text": "Building regulations excerpt...",
+      "page": null
     }
   ],
-  "model": "gpt-3.5-turbo"
+  "model": "llama-3.1-8b-instant (RAG Mode)"
 }
 ```
 
-### GET /
+### GET `/api/health`
+Health check endpoint.
 
-Health check endpoint
-
-### GET /docs
-
-Interactive API documentation (Swagger UI)
-
-## 🔑 Environment Variables
-
-### Backend (.env)
-
-```env
-# Pinecone
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX=govflow-index
-PINECONE_ENVIRONMENT=us-east-1
-
-# Grok AI (LLM)
-GROK_API_KEY=your_grok_ai_api_key
-LLM_MODEL=grok-1
-
-# OpenAI (for embeddings only)
-OPENAI_API_KEY=your_openai_api_key
-
-# App Config
-DEBUG=True
-CORS_ORIGINS=["http://localhost:5173", "http://localhost:3000"]
-```
-
-### Frontend (.env.local)
-
-```env
-VITE_API_URL=http://localhost:8000/api
-```
-
-## 🏗️ Architecture
-
-### Backend Flow
-
-1. **Request**: User sends query + country filter
-2. **Embedding**: Query converted to vector using OpenAI embeddings
-3. **Retrieval**: Query Pinecone with country filter
-4. **Context**: Build prompt with retrieved chunks
-5. **Generation**: Grok AI generates answer using context
-6. **Response**: Return answer + sources
-
-### Pinecone Vector Schema
-
+**Response:**
 ```json
 {
-  "id": "unique-doc-id",
-  "values": [0.123, 0.456, ...],
-  "metadata": {
-    "text": "Document chunk content",
-    "source": "filename.pdf",
-    "page": 3,
-    "country": "USA"
-  }
+  "status": "healthy",
+  "version": "1.0.0"
 }
 ```
 
-## 📊 Key Components
-
-### Backend Services
-
-**RAGPipeline**: Orchestrates the entire RAG flow
-- Converts queries to embeddings
-- Retrieves relevant documents
-- Generates answers with LLM
-- Formats responses
-
-**PineconeService**: Vector database operations
-- Query with metadata filtering
-- Upsert documents with embeddings
-- Delete vectors
-
-**LLMService**: Language model interaction
-- Generate answers from context
-- Extract and format sources
-- Handle prompt engineering
-
-### Frontend Components
-
-**ChatBox**: Main chat interface
-- Message history display
-- Input with send button
-- Loading states
-- Error handling
-
-**Filter**: Country selector
-- Dropdown with 8+ countries
-- Real-time filter updates
-
-**Message**: Individual message display
-- User/assistant messages
-- Source attribution
-- Timestamps
-
-## 🚢 Deployment
-
-### Frontend (Vercel)
-
-```bash
-cd frontend
-npm run build
-# Deploy 'dist' folder to Vercel
-# Set environment variables in Vercel dashboard
-```
-
-### Backend (Render or Railway)
-
-1. Push code to GitHub
-2. Connect repository to Render/Railway
-3. Set build command: `pip install -r requirements.txt`
-4. Set start command: `uvicorn app.main:app --host 0.0.0.0 --port 8000`
-5. Add environment variables
-6. Deploy
-
-**Important**: Update CORS_ORIGINS with production URLs
-
-## 🔒 Security Best Practices
-
-✅ Environment variables for all secrets
-✅ No hardcoded API keys
-✅ CORS middleware configured
-✅ Input validation with Pydantic
-✅ Error handling without exposing internals
-✅ Async endpoints prevent blocking
-
-⚠️ **To do in production**:
-- Add authentication (JWT/OAuth)
-- Implement rate limiting
-- Add request logging
-- Use HTTPS
-- Set appropriate CORS origins
-- Add monitoring/alerting
+---
 
 ## 🧪 Testing
+
+### Test Legal Questions (Pakistan)
+1. Select "Pakistan"
+2. Ask: "What are the amendments in the LDA Building and Zoning Regulations for 2019?"
+   - Expected: ✅ Shows sources from LDA PDFs
+
+### Test General Questions
+1. Ask: "How can you help me?"
+   - Expected: ✅ LLM response, no sources
+
+### Test Out-of-Domain
+1. Ask: "What's the weather?"
+   - Expected: ❌ Rejected as non-policy
+
+### Test Country Filter
+1. Select "USA"
+2. Ask: "What are LDA regulations?"
+   - Expected: ❌ "You've selected USA filter, but asked about Pakistan"
+
+---
+
+## 🐳 Docker Deployment
 
 ### Backend
 ```bash
 cd backend
-pip install pytest
-pytest
+docker build -t govflow-backend .
+docker run -p 8000:8000 --env-file .env govflow-backend
 ```
 
 ### Frontend
 ```bash
 cd frontend
-npm run test
+docker build -t govflow-frontend .
+docker run -p 3000:3000 govflow-frontend
 ```
 
-## 📝 Customization
+---
 
-### Use Grok AI (Recommended)
+## ☁️ Production Deployment
 
-1. Get Grok API key from https://console.x.ai/
-2. Add to `backend/.env`:
-   ```env
-   GROK_API_KEY=your_grok_key
-   LLM_MODEL=grok-1
+### Digital Ocean (Backend)
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Production ready"
+   git push origin main
    ```
-3. Keep OpenAI API key for embeddings
-4. See [GROK_SETUP.md](./GROK_SETUP.md) for detailed setup
 
-### Add New Countries
+2. **Create App on Digital Ocean**
+   - Connect GitHub repo
+   - Set build command: `cd backend && pip install -r requirements.txt`
+   - Set run command: `cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8080`
+   - Set environment variables (from `.env`)
+   - Deploy
 
-Edit [Filter.jsx](frontend/src/components/Filter.jsx):
-```jsx
-const countries = [
-  'USA',
-  'UK',
-  'Canada',
-  'YourCountry'  // Add here
-]
+3. **Estimated Cost**: ~$5-12/month (App Platform)
+
+### Vercel (Frontend)
+
+1. **Create Vercel Project**
+   - Import from GitHub
+   - Set root directory: `frontend`
+   - Build command: `npm run build`
+   - Output: `dist`
+
+2. **Environment Variables**
+   - `VITE_API_URL=<your-digital-ocean-backend-url>`
+
+3. **Deploy** - automatic on git push
+
+---
+
+## 🏗️ Architecture
+
+```
+User Browser (Frontend - Vercel)
+    ↓ (HTTP REST API)
+    ↓
+FastAPI Backend (Digital Ocean)
+    ↓
+RAG Pipeline:
+    ├→ HuggingFace (embed query)
+    ├→ Pinecone (retrieve vectors)
+    └→ Groq LLM (generate answer)
+    ↓
+Returns: Answer + Sources
 ```
 
-### Change LLM Provider
+### How RAG Works
 
-Edit [config.py](backend/app/core/config.py) and [llm_service.py](backend/app/services/llm_service.py):
-```python
-# Use Grok instead of OpenAI
-# llm = Grok(api_key=api_key)
-```
+1. **User asks question** → Frontend sends to backend
+2. **Embed query** → HuggingFace generates 384-dim vector (free, local)
+3. **Retrieve documents** → Pinecone searches with country filter
+4. **Smart filtering** → Only uses docs with relevance score ≥ 0.5
+5. **Generate answer** → Groq LLM with document context (free tier)
+6. **Return response** → Answer + source references
 
-### Customize Prompts
+### Two Modes
 
-Edit [rag_pipeline.py](backend/app/services/rag_pipeline.py):
-```python
-prompt_template = PromptTemplate(
-    input_variables=["context", "query"],
-    template="Your custom prompt here..."
-)
-```
+- **RAG Mode**: Documents found + score ≥ 0.5
+  - Model: "llama-3.1-8b-instant (RAG Mode)"
+  - Sources: Shown
+  
+- **General Mode**: No documents OR score < 0.5
+  - Model: "llama-3.1-8b-instant (General Mode)"
+  - Sources: Empty
+  - Still country-filtered
+
+---
+
+## 🔐 Security Notes
+
+### Current (Development)
+- ⚠️ Passwords stored in plain text (localStorage)
+- ⚠️ No rate limiting
+- ⚠️ No API authentication
+
+### For Production
+- ✅ Add PostgreSQL database for users
+- ✅ Hash passwords with bcrypt
+- ✅ Add JWT authentication
+- ✅ Implement rate limiting
+- ✅ Use HTTPS only
+- ✅ Add CORS properly configured
+- ✅ Store API keys securely
+
+---
+
+## 📊 Free Tier Limits
+
+| Service | Free Tier | Limit |
+|---------|-----------|-------|
+| Pinecone | Vector DB | 100,000 vectors |
+| Groq | LLM | High rate limit |
+| HuggingFace | Embeddings | Local (unlimited) |
+| Digital Ocean | Backend | $5/month |
+| Vercel | Frontend | Unlimited |
+
+---
 
 ## 🐛 Troubleshooting
 
 ### Backend won't start
-- Check Python version (3.9+)
-- Verify .env file exists and has API keys
-- Check port 8000 is not in use
+```bash
+# Check if port 8000 is in use
+netstat -ano | findstr :8000  # Windows
+lsof -i :8000                 # Mac/Linux
 
-### Frontend won't connect to backend
-- Ensure backend is running on 8000
-- Check VITE_API_URL in .env.local
-- Check CORS_ORIGINS in backend .env
+# Try different port
+uvicorn app.main:app --port 8001
+```
 
-### No results from Pinecone
-- Verify API key is correct
-- Check index name matches
-- Ensure documents are uploaded to Pinecone
-- Verify country filter matches document metadata
+### Frontend API errors
+- Check `.env` has correct backend URL
+- Verify backend is running
+- Check CORS settings in `app/main.py`
 
-### API rate limiting
-- Check OpenAI quota
-- Check Pinecone quota
-- Implement request throttling in production
+### No documents retrieved
+- Verify PDFs in `backend/knowledge_base/`
+- Run: `python ingest_pdfs_simple.py`
+- Check Pinecone dashboard for vectors
 
-## 📚 Resources
-
-- [FastAPI Docs](https://fastapi.tiangolo.com/)
-- [Pinecone Docs](https://docs.pinecone.io/)
-- [LangChain Docs](https://python.langchain.com/)
-- [React Docs](https://react.dev/)
-- [Vite Docs](https://vitejs.dev/)
-
-## 📄 License
-
-MIT License - Feel free to use for personal and commercial projects
-
-## 🤝 Contributing
-
-Contributions welcome! Please follow these steps:
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
-## ✉️ Support
-
-For issues and questions:
-- Open an issue on GitHub
-- Check existing documentation
-- Review code comments for implementation details
+### Wrong answers
+- Check if question matches document content
+- Verify country filter matches question topic
+- Try more specific question phrasing
 
 ---
 
-**Built with ❤️ for government policy research**
+## 📝 Project Structure
+
+```
+govflow_ai/rag-chatbot/
+├── backend/
+│   ├── app/
+│   │   ├── main.py              # FastAPI entry point
+│   │   ├── core/config.py       # Environment config
+│   │   ├── models/
+│   │   │   └── request_models.py # Pydantic models
+│   │   ├── routes/
+│   │   │   └── chat.py          # /api/chat endpoint
+│   │   └── services/
+│   │       ├── embeddings_service.py  # HuggingFace
+│   │       ├── pinecone_service.py    # Vector DB
+│   │       ├── llm_service.py         # Groq LLM
+│   │       └── rag_pipeline.py        # RAG orchestration
+│   ├── knowledge_base/          # PDF storage
+│   ├── .env.example
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Signup.jsx
+│   │   │   └── Chat.jsx
+│   │   ├── components/
+│   │   │   ├── ChatBox.jsx
+│   │   │   ├── Filter.jsx
+│   │   │   └── Message.jsx
+│   │   └── services/
+│   │       └── api.js           # API client
+│   ├── .env.example
+│   ├── package.json
+│   └── Dockerfile
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## 📧 Support
+
+For issues or questions:
+1. Check **Troubleshooting** section above
+2. Review API endpoints documentation
+3. Check backend logs: `uvicorn` output
+4. Verify `.env` configuration
+
+---
+
+## 📄 License
+
+MIT License - Feel free to use and modify
+
+---
+
+## 🎯 Next Steps
+
+- [ ] Add database for persistent user storage
+- [ ] Implement JWT authentication
+- [ ] Add chat history per user
+- [ ] Deploy to Digital Ocean
+- [ ] Deploy to Vercel
+- [ ] Add rate limiting
+- [ ] Add admin dashboard for PDF management
+
+---
+
+**Last Updated**: April 28, 2026  
+**Version**: 1.0.0 - Production Ready
