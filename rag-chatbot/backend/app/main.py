@@ -88,7 +88,10 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
+    allow_origins=[
+        "https://gov-flow-ai-smoky.vercel.app/",  # Vercel URL
+        "http://localhost:5173"  # Keep for local dev
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
